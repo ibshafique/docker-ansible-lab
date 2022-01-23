@@ -42,7 +42,7 @@ sudo systemctl enable ssh &&\
 sudo systemctl restart ssh
 ```
 
-### Installing Docker Engine
+## Installing Docker Engine
 1. Update the apt package index and install packages to allow apt to use a repository over HTTPS:
 ```sh 
 sudo apt-get update
@@ -106,7 +106,7 @@ For more examples and ideas, visit:
  https://docs.docker.com/get-started/
 ```
 
-### Installing Docker-Compose
+## Installing Docker-Compose
 
 1. Run this command to download the current stable release of Docker Compose:
 ```sh
