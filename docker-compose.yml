@@ -1,0 +1,172 @@
+version: '3.9'
+services:
+
+#master node ubuntu20.04
+  k-master01:
+    image: masternode
+    build:
+      context: .
+      dockerfile: dockerfile_ubuntu2004_masternode
+    container_name: k-master01
+    hostname: k-master01
+    ports:
+      - 22:22
+    restart: unless-stopped
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpus: 0.5
+    networks:
+      ansible-net:
+        ipv4_address: 172.20.0.100
+
+###managed nodes
+##three ubuntu based webapp servers
+  k-web01:
+    image: webubuntu2004
+    build:
+      context: .
+      dockerfile: dockerfile_ubuntu2004
+    container_name: k-web01
+    hostname: k-web01
+    ports:
+      - 22:22
+    restart: unless-stopped
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpus: 0.5
+    networks:
+      ansible-net:
+        ipv4_address: 172.20.0.11
+
+  k-web02:
+    image: webubuntu2004
+    container_name: k-web02
+    hostname: k-web02
+    ports:
+      - 22:22
+    restart: unless-stopped
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpus: 0.5
+    networks:
+      ansible-net:
+        ipv4_address: 172.20.0.12
+
+  k-web03:
+    image: webubuntu2004
+    container_name: k-web03
+    hostname: k-web03
+    ports:
+      - 22:22
+    restart: unless-stopped
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpus: 0.5
+    networks:
+      ansible-net:
+        ipv4_address: 172.20.0.13
+
+
+##three rhel8 based database servers
+  k-db01:
+    image: dbrhel8
+    build:
+      context: .
+      dockerfile: dockerfile_rhel8
+    container_name: k-db01
+    hostname: k-db01
+    ports:
+      - 222:22
+    restart: unless-stopped
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpus: 0.5
+    tty: true
+    networks:
+      ansible-net:
+        ipv4_address: 172.20.0.21
+
+  k-db02:
+    image: dbrhel8
+    container_name: k-db02
+    hostname: k-db02
+    ports:
+      - 222:22
+    restart: unless-stopped
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpus: 0.5
+    tty: true
+    networks:
+      ansible-net:
+        ipv4_address: 172.20.0.22
+
+  k-db03:
+      image: dbrhel8
+      container_name: k-db03
+      hostname: k-db03
+      ports:
+        - 222:22
+      restart: unless-stopped
+      mem_limit: 512m
+      mem_reservation: 128M
+      cpus: 0.5
+      tty: true
+      networks:
+        ansible-net:
+          ipv4_address: 172.20.0.23
+
+##three alpine3.15 based SFTP servers
+  k-sftp01:
+    image: sftpalpine315
+    build:
+      context: .
+      dockerfile: dockerfile_alpine315
+    container_name: k-sftp01
+    hostname: k-sftp01
+    ports:
+      - 222:22
+    restart: unless-stopped
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpus: 0.5
+    tty: true
+    networks:
+      ansible-net:
+        ipv4_address: 172.20.0.31
+
+  k-sftp02:
+    image: sftpalpine315
+    container_name: k-sftp02
+    hostname: k-sftp02
+    ports:
+      - 222:22
+    restart: unless-stopped
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpus: 0.5
+    tty: true
+    networks:
+      ansible-net:
+        ipv4_address: 172.20.0.32
+    
+  k-sftp03:
+    image: sftpalpine315
+    container_name: k-sftp03
+    hostname: k-sftp03
+    ports:
+      - 222:22
+    restart: unless-stopped
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpus: 0.5
+    tty: true
+    networks:
+      ansible-net:
+        ipv4_address: 172.20.0.33
+
+networks:
+  ansible-net:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24

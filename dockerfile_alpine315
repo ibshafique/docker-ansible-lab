@@ -1,0 +1,28 @@
+FROM alpine:3.15
+
+ENV NOTVISIBLE="in users profile" \
+    TZ="Asia/Dhaka" 
+    #DEBIAN_FRONTEND="noninteractive"
+
+COPY id_rsa.pub /
+
+RUN apk update && apk upgrade &&\
+    apk add \
+    openssh-server \
+    net-tools \
+    vim\
+    htop \
+    bash \
+    nano &&\
+    mkdir /var/run/sshd &&\
+    echo 'root:password' | chpasswd &&\
+    sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config &&\
+    echo "export VISIBLE=now" >> /etc/profile &&\
+    adduser -D -h /home/ansible-usr -s /bin/bash ansible-usr &&\
+    mkdir /home/ansible-usr/.ssh &&\
+    cp /id_rsa.pub /home/ansible-usr/.ssh/authorized_keys &&\
+    chown -R ansible-usr:ansible-usr /home/ansible-usr/.ssh &&\
+    chmod 700 /home/ansible-usr/.ssh &&\
+    chmod 640 /home/ansible-usr/.ssh/authorized_keys
+
+EXPOSE 22
