@@ -1,7 +1,7 @@
 # Docker Ansbile Lab
 #### _A Containerized Ansible Lab To Start Practicing Ansbile Right Away!_
 
-![GitHub followers](https://img.shields.io/github/followers/ibshafique?style=social)  ![made-with-docker](https://img.shields.io/badge/docker%20version-20.10.12-green) ![made-with-docker-compose](https://img.shields.io/badge/docker--compose%20version-1.29.2-blue) ![made-with-ansible](https://img.shields.io/badge/ansible%20version-20.10.12-red)
+![GitHub followers](https://img.shields.io/github/followers/ibshafique?style=social)  ![made-with-docker](https://img.shields.io/badge/docker%20version-20.10.12-green) ![made-with-docker-compose](https://img.shields.io/badge/docker--compose%20version-1.29.2-blue) ![made-with-ansible](https://img.shields.io/badge/ansible%20version-2.12.1-red)
 
 ## Contents
 - [About the Project](#about-the-project)
