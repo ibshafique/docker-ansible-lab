@@ -13,6 +13,7 @@ RUN apk update && apk upgrade &&\
     vim\
     htop \
     bash \
+    python3 \
     nano &&\
     mkdir /var/run/sshd &&\
     echo 'root:password' | chpasswd &&\
