@@ -26,23 +26,7 @@ The aim of this project is to setup an Ansible Lab using Docker, the easy and fa
 - 3 RHEL 8 based database servers
 - 3 Alpine 3.15 based SFTP servers
 
-| Hostname | IP Address |
-| ------ | ------ |
-|  |  |
-| k-master01 | 172.20.0.100 |
-|  |  |
-| k-web01 | 172.20.0.11 | 
-| k-web02 | 172.20.0.12 |
-| k-web03 | 172.20.0.13 |
-|  |  |
-| k-db01 | 172.20.0.21 |
-| k-db02 | 172.20.0.22 |
-| k-db03 | 172.20.0.23 |
-|  |  |
-| k-sftp01 | 172.20.0.31 |
-| k-sftp02 | 172.20.0.32 |
-| k-sftp03 | 172.20.0.33 |
-
+![Network Diagram](./network-diagram.png)
 
 ## Requirements
 - Docker Engine Version: 20.10.12
