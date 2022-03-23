@@ -6,22 +6,17 @@ ENV NOTVISIBLE="in users profile" \
 
 COPY id_rsa.pub /
 
-RUN apt-get update && apt-get -y upgrade &&\
-    apt-get install -y \
-    openssh-server \
-    net-tools \
-    vim\
-    iputils-ping \
-    htop \
-    nano &&\
-    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone &&\
+RUN apt-get update && apt-get -y upgrade
+RUN apt-get install -y openssh-server sudo net-tools vim iputils-ping htop nano
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone &&\
     dpkg-reconfigure -f noninteractive tzdata &&\
     mkdir /var/run/sshd &&\
     echo 'root:password' | chpasswd &&\
     sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config &&\
     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd &&\
     echo "export VISIBLE=now" >> /etc/profile &&\
-    useradd -m -d /home/ansible-usr -s /bin/bash ansible-usr &&\
+    useradd -m -d /home/ansible-usr -s /bin/bash -G sudo ansible-usr &&\
+    echo 'ansible-usr:123' | chpasswd &&\
     mkdir /home/ansible-usr/.ssh &&\
     cp /id_rsa.pub /home/ansible-usr/.ssh/authorized_keys &&\
     chown -R ansible-usr:ansible-usr /home/ansible-usr/.ssh &&\
