@@ -2,28 +2,28 @@ FROM alpine:3.15
 
 ENV NOTVISIBLE="in users profile" \
     TZ="Asia/Dhaka" 
-    #DEBIAN_FRONTEND="noninteractive"
 
 COPY id_rsa.pub /
+COPY id_rsa /
 
-RUN apk update && apk upgrade &&\
-    apk add \
-    openssh-server \
-    net-tools \
-    vim\
-    htop \
-    bash \
-    python3 \
-    nano &&\
-    mkdir /var/run/sshd &&\
+RUN apk update
+RUN apk add openssh net-tools vim htop bash tzdata python3 nano sudo --no-cache
+RUN mkdir /var/run/sshd &&\
     echo 'root:password' | chpasswd &&\
     sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config &&\
+    echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config &&\
     echo "export VISIBLE=now" >> /etc/profile &&\
     adduser -D -h /home/ansible-usr -s /bin/bash ansible-usr &&\
+    echo "ansible-usr ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/ansible-usr &&\
+    echo 'ansible-usr:123' | chpasswd &&\
     mkdir /home/ansible-usr/.ssh &&\
     cp /id_rsa.pub /home/ansible-usr/.ssh/authorized_keys &&\
     chown -R ansible-usr:ansible-usr /home/ansible-usr/.ssh &&\
     chmod 700 /home/ansible-usr/.ssh &&\
+    chmod 640 /home/ansible-usr/.ssh/authorized_keys &&\
+    ssh-keygen -A &&\
     chmod 640 /home/ansible-usr/.ssh/authorized_keys
 
-EXPOSE 22
+#EXPOSE 22
+
+ENTRYPOINT /usr/sbin/sshd -D -p 22
