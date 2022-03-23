@@ -5,28 +5,33 @@ ENV NOTVISIBLE="in users profile" \
     #DEBIAN_FRONTEND="noninteractive"
 
 COPY id_rsa.pub /
+COPY id_rsa /
 
-RUN yum update -y &&\
-    yum install -y \
-    openssh \
-    openssh-server \
-    net-tools \
-    vim\
-    python3 \
-    nano &&\
-    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone &&\
+RUN yum update -y
+RUN yum install -y openssh openssh-server net-tools vim nano sudo
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone &&\
     mkdir /var/run/sshd &&\
     echo 'root:password' | chpasswd &&\
     sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config &&\
     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd &&\
     echo "export VISIBLE=now" >> /etc/profile &&\
-    useradd -m -d /home/ansible-usr -s /bin/bash ansible-usr &&\
+    useradd -m -d /home/ansible-usr -s /bin/bash -G wheel ansible-usr &&\
+    echo 'ansible-usr:123' | chpasswd &&\
     mkdir /home/ansible-usr/.ssh &&\
     cp /id_rsa.pub /home/ansible-usr/.ssh/authorized_keys &&\
     cp /id_rsa.pub /etc/ssh/ &&\
     chown -R ansible-usr:ansible-usr /home/ansible-usr/.ssh &&\
     chmod 600 /etc/ssh/id_rsa.pub &&\
     chmod 700 /home/ansible-usr/.ssh &&\
+    ssh-keygen -A &&\
     chmod 640 /home/ansible-usr/.ssh/authorized_keys
 
-EXPOSE 222
+#EXPOSE 22
+
+
+CMD /sbin/sshd -D -p 22
+ 
+
+#cp /id_rsa /home/ansible-usr/.ssh/authorized_keys &&\
+#cp /id_rsa /etc/ssh/ &&\ 
+#chmod 600 /etc/ssh/id_rsa &&\
